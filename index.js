@@ -2,6 +2,7 @@ const express = require('express');
 const {mongoose} = require('mongoose');
 const app = express();
 const routes = require('./src/routes.js');
+const cors = require('./src/middlewares/cors.js');
 
 const startDataBase = () =>{
     try {
@@ -17,6 +18,7 @@ const startDataBase = () =>{
 startDataBase();
 
 app.use(express.json());
+app.use(cors());
 app.use(routes);
 
 app.listen(3000, () => console.log('Server is listening on port 3000...'))
