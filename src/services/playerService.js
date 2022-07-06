@@ -4,7 +4,11 @@ exports.getAllPlayers = () =>{
     return Player.find();
 };
 
-exports.createPlayer =  (data) =>{
+exports.getOnePlayer = (id) =>{
+    return Player.findById(id);
+}
+
+exports.createPlayer = (data) =>{
     return Player.create(data);
 };
 exports.getOnePlayer = (id) =>{
@@ -17,4 +21,4 @@ exports.deletePlayer = (id) =>{
 
 exports.editPlayer = (id,data) =>{
     return Player.findByIdAndUpdate(id, data, {new: true});
-}
+};
