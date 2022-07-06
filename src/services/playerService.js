@@ -4,13 +4,17 @@ exports.getAllPlayers = () =>{
     return Player.find();
 };
 
-exports.createPlayer = async (data) =>{
-    const player = await Player.create(data);
-
-    return player
+exports.createPlayer =  (data) =>{
+    return Player.create(data);
 };
-exports.getOnePlayer = async (id) =>{
-    const player = await Player.findById(id);
+exports.getOnePlayer = (id) =>{
+    return Player.findById(id);
+};
 
-    return player
+exports.deletePlayer = (id) =>{
+    return Player.findByIdAndDelete(id);
+};
+
+exports.editPlayer = (id,data) =>{
+    return Player.findByIdAndUpdate(id, data, {new: true});
 }
