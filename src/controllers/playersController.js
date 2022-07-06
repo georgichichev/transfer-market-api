@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const playerService = require('../services/playerService.js');
-const {isAuth} = require('../middlewares/auth.js');
+const {isAuth, preloadPlayer, isOwner} = require('../middlewares/auth.js');
 
 router.get('/', async (req, res) => {
     const players = await playerService.getAllPlayers();
@@ -9,40 +9,37 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', isAuth, async (req, res) => {
-   const player = await playerService.createPlayer(req.body);
+    const player = await playerService.createPlayer(req.body, req.user.id);
 
-   res.json(player);
+    res.json(player);
 });
 
-router.get('/:id', async(req, res) => {
-    try{
+router.get('/:id', async (req, res) => {
+    try {
         const player = await playerService.getOnePlayer(req.params.id);
 
         res.json(player);
-    }
-    catch (err){
+    } catch (err) {
         console.log(err);
         res.status(400).json({message: 'Player not found.'})
     }
 });
 
-router.delete('/:id',async (req, res) => {
+router.delete('/:id', isAuth, preloadPlayer, isOwner, async (req, res) => {
     try {
         await playerService.deletePlayer(req.params.id);
-    }
-    catch (err){
+    } catch (err) {
         console.log(err);
         res.status(400).json({message: 'Player not found.'});
     }
 });
 
-router.put('/:id',async (req, res) => {
+router.put('/:id', isAuth, preloadPlayer, isOwner, async (req, res) => {
     try {
         const player = await playerService.editPlayer(req.params.id, req.body);
 
         res.json(player);
-    }
-    catch (err){
+    } catch (err) {
         console.log(err);
 
         res.status(400).json({message: 'Player not found.'});

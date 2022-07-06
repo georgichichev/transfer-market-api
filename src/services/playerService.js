@@ -8,8 +8,8 @@ exports.getOnePlayer = (id) =>{
     return Player.findById(id);
 }
 
-exports.createPlayer = (data) =>{
-    return Player.create(data);
+exports.createPlayer = (data, creator) =>{
+    return Player.create({...data, creator});
 };
 exports.getOnePlayer = (id) =>{
     return Player.findById(id);

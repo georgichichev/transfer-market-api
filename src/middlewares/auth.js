@@ -43,7 +43,9 @@ exports.preloadPlayer = async(req, res, next) =>{
 }
 
 exports.isOwner = (req, res, next) =>{
-    if (req.user._id === res.player.creator){
+    console.log(req.user);
+
+    if (req.user.id == res.locals.player.creator){
         next();
     }
     else{
