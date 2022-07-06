@@ -5,7 +5,11 @@ const {promisify} = require('util');
 
 const secret = 'hd1kg2k 1g23ghjabn1£"!"d';
 
+const jwtVerify = promisify(jwt.verify);
 const jwtSign = promisify(jwt.sign);
+
+const tokenBlacklist = new Set();
+
 
 exports.register = async (data) =>{
     const {email, username, password} = data;
@@ -45,4 +49,16 @@ exports.login = async (data) =>{
         accessToken: token,
         _id: user._id
     }
+};
+
+exports.logout = (token) =>{
+    tokenBlacklist.add(token);
+};
+
+exports.validateToken = (token) =>{
+    if (tokenBlacklist.has(token)){
+        throw new Error('Invalid access token.')
+    }
+
+    return jwtVerify(token, secret);
 }

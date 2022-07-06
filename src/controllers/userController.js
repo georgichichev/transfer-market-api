@@ -25,6 +25,12 @@ router.post('/login',async (req, res) => {
 
         res.status(400).json({message});
     }
+});
+
+router.get('/logout', (req, res) => {
+    userService.logout(req.token);
+
+    res.status(204).end();
 })
 
 module.exports = router;

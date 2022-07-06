@@ -1,15 +1,13 @@
-const jwt = require('jsonwebtoken');
-const {promisify} = require('util');
-const jwtVerify = promisify(jwt.verify);
 const secret = 'hd1kg2k 1g23ghjabn1£"!"d';
 const playerService = require('../services/playerService.js');
+const {validateToken} = require('../services/userService.js');
 
 exports.auth = async (req, res, next) =>{
     const token = req.headers['x-authorization'];
 
     if (token){
         try{
-            const user = await jwtVerify(token, secret);
+            const user = await validateToken(token, secret);
             req.user = user;
             req.token = token;
         }
