@@ -20,5 +20,5 @@ exports.deletePlayer = (id) =>{
 };
 
 exports.editPlayer = (id,data) =>{
-    return Player.findByIdAndUpdate(id, data, {new: true});
+    return Player.findByIdAndUpdate(id, data, {new: true, overwrite: true, runValidators: true});
 };

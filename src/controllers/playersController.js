@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const playerService = require('../services/playerService.js');
 const {isAuth, preloadPlayer, isOwner} = require('../middlewares/auth.js');
+const {errorMapper} = require('../util.js');
+
 
 router.get('/', async (req, res) => {
     const players = await playerService.getAllPlayers();
@@ -9,9 +11,17 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', isAuth, async (req, res) => {
-    const player = await playerService.createPlayer(req.body, req.user.id);
+    try{
+        const player = await playerService.createPlayer(req.body, req.user.id);
 
-    res.json(player);
+        res.json(player);
+    }
+    catch (err){
+        console.log(err)
+
+        const message = errorMapper(err);
+        res.status(400).json({message});
+    }
 });
 
 router.get('/:id', async (req, res) => {
@@ -36,14 +46,13 @@ router.delete('/:id', isAuth, preloadPlayer, isOwner, async (req, res) => {
 
 router.put('/:id', isAuth, preloadPlayer, isOwner, async (req, res) => {
     try {
-        const player = await playerService.editPlayer(req.params.id, req.body);
+        const player = await playerService.editPlayer(req.params.id, {...req.body, creator: req.user._id});
 
         res.json(player);
     } catch (err) {
-        console.log(err);
-
-        res.status(400).json({message: 'Player not found.'});
+        const message = errorMapper(err);
+        res.status(400).json({message});
     }
-})
+});
 
 module.exports = router;

@@ -30,20 +30,19 @@ exports.isAuth = (req, res, next) =>{
 };
 
 exports.preloadPlayer = async(req, res, next) =>{
-    const item = await playerService.getOnePlayer(req.params.id);
-
-    if (!item){
+    try{
+        const player = await playerService.getOnePlayer(req.params.id);
+        req.player = player;
+    }
+    catch (err){
         return res.status(404).json({message: 'Player not found.'});
     }
 
-    res.locals.player = item;
     next();
 }
 
 exports.isOwner = (req, res, next) =>{
-    console.log(req.user);
-
-    if (req.user.id == res.locals.player.creator){
+    if (req.user._id == req.player.creator){
         next();
     }
     else{

@@ -1,9 +1,9 @@
 exports.errorMapper = (error) => {
     if (error.name == 'ValidationError') {
         return Object
-            .entries(error.errors)
-            .map(([key, err]) => err.properties.message)
-            .join('\n');
+            .values(error.errors)
+            .map(x => x.properties.message)
+            .join(' ');
     } else {
         return error.message;
     }
