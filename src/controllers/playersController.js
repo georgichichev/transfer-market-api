@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const playerService = require('../services/playerService.js');
-const {json} = require("express");
+const {isAuth} = require('../middlewares/auth.js');
 
 router.get('/', async (req, res) => {
     const players = await playerService.getAllPlayers();
@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
     res.json(players);
 });
 
-router.post('/create', async (req, res) => {
+router.post('/', isAuth, async (req, res) => {
    const player = await playerService.createPlayer(req.body);
 
    res.json(player);
