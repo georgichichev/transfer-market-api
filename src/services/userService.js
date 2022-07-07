@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const {promisify} = require('util');
 
-const secret = 'hd1kg2k 1g23ghjabn1£"!"d';
+const {JWT_SECRET} = require('../constants.js');
 
 const jwtVerify = promisify(jwt.verify);
 const jwtSign = promisify(jwt.sign);
@@ -42,7 +42,7 @@ exports.login = async (data) =>{
 
     const payload = {_id: user._id, email};
 
-    const token = await jwtSign(payload, secret, {expiresIn: '2h'});
+    const token = await jwtSign(payload, JWT_SECRET, {expiresIn: '2h'});
 
     return {
         email,
@@ -60,5 +60,5 @@ exports.validateToken = (token) =>{
         throw new Error('Invalid access token.')
     }
 
-    return jwtVerify(token, secret);
+    return jwtVerify(token, JWT_SECRET);
 }
